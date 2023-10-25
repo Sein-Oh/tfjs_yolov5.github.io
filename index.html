@@ -4,20 +4,22 @@
         <title>YOLO V5</title>
     </head>
     <body>
-        <input type="file" id="file_select">
-        <img id="input">
-        <!-- <canvas id="input"></canvas> -->
+        <video id="videoInput"></video>
         <canvas id="output"></canvas>
     </body>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
     <script>
-        const inp = document.querySelector("#file_select");
-        inp.addEventListener("change", e => {
-            const file = e.target.files[0];
-            const imgSrc = URL.createObjectURL(file);
-            document.querySelector("#input").src = imgSrc;
-            
-        });
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+        const constraints = { audio: false, video: true };
+        const video = document.getElementById("videoInput");
+        function successCallback(stream) {
+            video.srcObject = stream;
+            video.play();
+        }
+        function errorCallback(error) {
+            console.log(error);
+        }
+        navigator.getUserMedia(constraints, successCallback, errorCallback);
         async function create_model() {
             const weightSrc = "https://raw.githubusercontent.com/Sein-Oh/MANDLOH/main/Javascript/tfjs_weights/yolov5s_web_model/model.json";
             return tf.loadGraphModel(weightSrc);
