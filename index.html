@@ -7,6 +7,7 @@
 </head>
 
 <body>
+    <div id="info">모델을 불러오고 있습니다. 잠시 기다려 주세요...</div>
     <div id="main">
         <div class="container">
             <div class="canvas-wrapper">
@@ -24,6 +25,18 @@
     </div>
 </body>
 <script>
+    /* ----------------------------------------------------------
+    1. 목표 : 도장 불량 데이터 학습 수행 AI 시스템 구축
+      - 일관성 있는 도장 품질 검사 기준 적용
+      - 도장 관련 지식 부족 인원도 도장 품질 판단
+      - 카메라 연동을 통해 신속한 검사 가능 시스템 구축
+    
+    2. 진행 현황
+      - YOLO V5 모델 -> Tensorflow.js 모델로 변환 (완료)
+      - Tensorflow.js 모델을 웹 브라우저에서 구현 (완료)
+    
+    */ 
+
     // COCO 데이터셋 라벨링
     const coco_names = ['person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'train', 'truck', 'boat', 'traffic light',
         'fire hydrant', 'stop sign', 'parking meter', 'bench', 'bird', 'cat', 'dog', 'horse', 'sheep', 'cow',
@@ -209,6 +222,7 @@
     async function app() {
         camera = await Camera.setupCamera();
         detector = await createDetector();
+        document.querySelector("#info").innerHTML = "모델 불러오기 완료. 앱을 시작합니다.";
         renderPrediction();
     };
     app();
