@@ -222,7 +222,7 @@
     async function app() {
         camera = await Camera.setupCamera();
         detector = await createDetector();
-        document.querySelector("#info").innerHTML = "모델 불러오기 완료. 앱을 시작합니다.";
+        document.querySelector("#info").innerHTML = "YOLO V5S 모델 불러오기 완료. 앱을 시작합니다.";
         renderPrediction();
     };
     app();
