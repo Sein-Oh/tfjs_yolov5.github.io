@@ -1,21 +1,30 @@
-<div id="main">
-    <div class="container">
-        <div class="canvas-wrapper">
-            <canvas id="output"></canvas>
-            <video id="video" playsinline style="
-          -webkit-transform: scaleX(-1);
-          transform: scaleX(-1);
-          visibility: hidden;
-          width: auto;
-          height: auto;
-          ">
-            </video>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>YOLO_V5 TFJS</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+</head>
+
+<body>
+    <div id="main">
+        <div class="container">
+            <div class="canvas-wrapper">
+                <canvas id="output"></canvas>
+                <video id="video" playsinline style="
+                  -webkit-transform: scaleX(-1);
+                  transform: scaleX(-1);
+                  visibility: hidden;
+                  width: auto;
+                  height: auto;
+                  ">
+                </video>
+            </div>
         </div>
     </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+</body>
 <script>
-
+    // COCO 데이터셋 라벨링
     const coco_names = ['person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'train', 'truck', 'boat', 'traffic light',
         'fire hydrant', 'stop sign', 'parking meter', 'bench', 'bird', 'cat', 'dog', 'horse', 'sheep', 'cow',
         'elephant', 'bear', 'zebra', 'giraffe', 'backpack', 'umbrella', 'handbag', 'tie', 'suitcase', 'frisbee',
@@ -26,6 +35,7 @@
         'microwave', 'oven', 'toaster', 'sink', 'refrigerator', 'book', 'clock', 'vase', 'scissors', 'teddy bear',
         'hair drier', 'toothbrush']
 
+    // 클라이언트 체크
     function isiOS() {
         return /iPhone|iPad|iPod/i.test(navigator.userAgent);
     }
@@ -38,6 +48,7 @@
         return isAndroid() || isiOS();
     }
 
+    // WebRTC 카메라 클래스
     class Camera {
         constructor() {
             this.video = document.getElementById('video');
@@ -45,30 +56,24 @@
             this.ctx = this.canvas.getContext('2d');
         }
 
-        /**
-         * Initiate a Camera instance and wait for the camera stream to be ready.
-         */
         static async setupCamera() {
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                throw new Error(
-                    'Browser API navigator.mediaDevices.getUserMedia not available');
+                throw new Error('Browser API navigator.mediaDevices.getUserMedia not available');
             }
 
+            // 카메라와 모델 이미지 크기 설정
             const $size = { width: 640, height: 640 };
             const $m_size = { width: 640, height: 640 };
             const videoConfig = {
                 'audio': false,
                 'video': {
                     facingMode: 'user',
-                    // Only setting the video to a specified size for large screen, on
-                    // mobile devices accept the default size.
                     width: isMobile() ? $m_size.width : $size.width,
                     height: isMobile() ? $m_size.height : $size.height,
                 }
             };
 
             const stream = await navigator.mediaDevices.getUserMedia(videoConfig);
-
             const camera = new Camera();
             camera.video.srcObject = stream;
 
@@ -82,7 +87,7 @@
 
             const videoWidth = camera.video.videoWidth;
             const videoHeight = camera.video.videoHeight;
-            // Must set below two lines, otherwise video element doesn't show.
+
             camera.video.width = videoWidth;
             camera.video.height = videoHeight;
 
@@ -90,17 +95,11 @@
             camera.canvas.height = videoHeight;
             const canvasContainer = document.querySelector('.canvas-wrapper');
             canvasContainer.style = `width: ${videoWidth}px; height: ${videoHeight}px`;
-
-            // Because the image from camera is mirrored, need to flip horizontally.
-            //camera.ctx.translate(camera.video.videoWidth, 0);
-            //camera.ctx.scale(-1, 1);
-
             return camera;
         }
 
         drawCtx() {
-            this.ctx.drawImage(
-                this.video, 0, 0, this.video.videoWidth, this.video.videoHeight);
+            this.ctx.drawImage(this.video, 0, 0, this.video.videoWidth, this.video.videoHeight);
         }
 
         clearCtx() {
@@ -120,7 +119,7 @@
 
             tf.dispose(res);
 
-            var i;
+            let i;
             for (i = 0; i < valid_detections_data; ++i) {
                 let [x1, y1, x2, y2] = boxes_data.slice(i * 4, (i + 1) * 4);
                 x1 *= this.canvas.width;
@@ -164,6 +163,7 @@
     let inferenceTimeSum = 0, lastPanelUpdate = 0;
     let rafId;
 
+    // YOLO V5 기본모델을 tfjs로 export한 weight파일 경로
     const yolov5n_weight = "https://raw.githubusercontent.com/Sein-Oh/MANDLOH/main/Javascript/tfjs_weights/yolov5s_web_model/model.json";
 
     async function createDetector() {
@@ -184,11 +184,8 @@
             return tf.image.resizeBilinear(tf.browser.fromPixels(camera.video), [modelWidth, modelHeight])
                 .div(255.0).expandDims(0);
         });
-        // Detector can be null if initialization failed (for example when loading
-        // from a URL that does not exist).
+        
         if (detector != null) {
-            // Detectors can throw errors, for example when using custom URLs that
-            // contain a model that doesn't provide the expected output.
             try {
                 detect_res = await detector.executeAsync(
                     input,
@@ -216,3 +213,4 @@
     };
     app();
 </script>
+</html>
