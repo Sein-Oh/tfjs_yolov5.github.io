@@ -216,7 +216,8 @@
 
     async function renderPrediction() {
         await renderResult();
-        rafId = requestAnimationFrame(renderPrediction);
+        // rafId = requestAnimationFrame(renderPrediction);
+        setTimeout(renderPrediction, 200);
     };
 
     async function app() {
