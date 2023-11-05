@@ -177,7 +177,10 @@
     let rafId;
 
     // YOLO V5 기본모델을 tfjs로 export한 weight파일 경로
-    const yolov5n_weight = "https://raw.githubusercontent.com/Sein-Oh/MANDLOH/main/Javascript/tfjs_weights/yolov5s_web_model/model.json";
+    // const yolov5n_weight = "https://raw.githubusercontent.com/Sein-Oh/MANDLOH/main/Javascript/tfjs_weights/yolov5s_web_model/model.json";
+
+    // YOLO V5 선박 도장데이터셋 9000장으로 학습한 weight
+    const yolov5n_weight = "https://raw.githubusercontent.com/Sein-Oh/MANDLOH/main/Javascript/tfjs_weights/yolov5_paint/model.json";
 
     async function createDetector() {
         return tf.loadGraphModel(yolov5n_weight);
