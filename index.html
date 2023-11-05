@@ -141,7 +141,8 @@
                 y2 *= this.canvas.height;
                 const width = x2 - x1;
                 const height = y2 - y1;
-                const klass = coco_names[classes_data[i]];
+                // const klass = coco_names[classes_data[i]];
+                const klass = classes_data[i];
                 const score = scores_data[i].toFixed(2);
 
                 // Draw the bounding box.
