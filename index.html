@@ -48,6 +48,19 @@
         'microwave', 'oven', 'toaster', 'sink', 'refrigerator', 'book', 'clock', 'vase', 'scissors', 'teddy bear',
         'hair drier', 'toothbrush']
 
+    const names = names = [
+        '워터스포팅',
+        '흐름',
+        '도막분리',
+        '핀홀',
+        '균열',
+        '부풀음',
+        '이물질포함',
+        '용접손상',
+        '스크래치',
+        '도막떨어짐'
+    ]
+
     // 클라이언트 체크
     function isiOS() {
         return /iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -142,7 +155,7 @@
                 const width = x2 - x1;
                 const height = y2 - y1;
                 // const klass = coco_names[classes_data[i]];
-                const klass = classes_data[i];
+                const klass = names[classes_data[i]];
                 const score = scores_data[i].toFixed(2);
 
                 // Draw the bounding box.
