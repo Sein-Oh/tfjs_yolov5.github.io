@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>YOLO_V5 TFJS</title>
+    <title>YOLO_V5 TFJS_final ver(2023.11.13)</title>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
 </head>
 
@@ -196,8 +196,9 @@
     // const yolov5n_weight = "https://raw.githubusercontent.com/Sein-Oh/MANDLOH/main/Javascript/tfjs_weights/yolov5s_web_model/model.json";
 
     // YOLO V5 선박 도장데이터셋 9000장으로 학습한 weight
-    const yolov5n_weight = "https://raw.githubusercontent.com/Sein-Oh/MANDLOH/main/Javascript/tfjs_weights/yolov5_paint/model.json";
-
+    //const yolov5n_weight = "https://raw.githubusercontent.com/Sein-Oh/MANDLOH/main/Javascript/tfjs_weights/yolov5_paint/model.json";
+    // 최종 데이터셋 학습 weight
+    const yolov5n_weight = "https://raw.githubusercontent.com/Sein-Oh/MANDLOH/main/Javascript/tfjs_weights/yolov5_paint_v2/model.json";
     async function createDetector() {
         return tf.loadGraphModel(yolov5n_weight);
     }
